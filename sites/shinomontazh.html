@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+/* Плавная прокрутка к разделам; отступ под закреплённое меню */
+html { scroll-behavior: smooth; }
+[id] { scroll-margin-top: 84px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}
+.pf-back{position:fixed;z-index:50;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));background:#1f2a24;color:#fff;font:600 14px system-ui,sans-serif;padding:10px 16px;border-radius:999px;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,.3)}</style><title>Шиномонтаж «Протектор»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Russo+One&family=Golos+Text:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: только тёмная тема, как асфальт с разметкой. Машина едет по дороге, ниже калькулятор цены, расшифровка маркировки шины и запись по слотам */
+:root {
+  --bg: #17191c;
+  --panel: #202328;
+  --panel2: #282c32;
+  --ink: #eceef1;
+  --muted: #9aa1ab;
+  --accent: #f2c200;
+  --car: #c94a3a;
+  --glass: #8fb3c9;
+  --rubber: #0b0c0e;
+  --rim: #b9bec6;
+  --line: #33373e;
+  --ok: #5ac38a;
+  --display: "Russo One", "Arial Black", sans-serif;
+  --body: "Golos Text", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; margin: 0; line-height: 1.05; text-wrap: balance; }
+h1 { font-size: clamp(40px, 7.5vw, 78px); text-transform: uppercase; }
+h1 em { font-style: normal; color: var(--accent); }
+h2 { font-size: clamp(28px, 4vw, 40px); text-transform: uppercase; }
+h3 { font-size: 19px; }
+p { margin: 0; }
+.tag { font-family: var(--mono); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+section { padding-block: 60px; }
+.sec-head { display: grid; gap: 10px; margin-bottom: 28px; max-width: 42em; }
+.sec-head p { color: var(--muted); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.stripe { height: 12px; background: repeating-linear-gradient(-45deg, var(--accent) 0 18px, var(--bg) 18px 36px); }
+
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 12px; }
+.logo { font-family: var(--display); font-size: 22px; color: var(--ink); text-decoration: none; text-transform: uppercase; }
+.logo span { color: var(--accent); }
+.nav ul { display: flex; gap: 20px; list-style: none; margin: 0; padding: 0; }
+.nav ul a { color: var(--ink); text-decoration: none; font-weight: 600; font-size: 15px; }
+.nav .ph { font-family: var(--mono); font-weight: 700; color: var(--accent); white-space: nowrap; }
+@media (max-width: 760px) { .nav ul { display: none; } }
+
+.btn { display: inline-block; font: inherit; font-family: var(--display); font-size: 17px; padding: 14px 22px; border-radius: 4px; text-decoration: none; cursor: pointer; border: 2px solid var(--accent); background: var(--accent); color: var(--bg); }
+.btn.ghost { background: transparent; color: var(--accent); }
+
+/* Первый экран */
+.hero { display: grid; grid-template-columns: 1fr 1.1fr; gap: 32px; align-items: center; padding-block: 48px 24px; }
+.hero > div { display: grid; gap: 20px; min-width: 0; }
+.hero .lead { font-size: 18px; color: var(--muted); max-width: 34em; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px; }
+.facts span { border: 1px solid var(--line); padding: 6px 12px; border-radius: 4px; font-weight: 600; font-size: 14px; }
+.btns { display: flex; flex-wrap: wrap; gap: 12px; }
+.scene { width: 100%; max-width: 100%; }
+@media (max-width: 860px) { .hero { grid-template-columns: 1fr; } }
+.hero-photo { margin: 0; position: relative; min-width: 0; }
+.hero-photo img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; clip-path: polygon(8% 0, 100% 0, 100% 100%, 0 100%); }
+.badge { position: absolute; left: 0; bottom: 20px; background: var(--accent); color: var(--bg); padding: 12px 16px; font-weight: 700; font-size: 14px; line-height: 1.2; }
+.badge b { display: block; font-family: var(--display); font-weight: 400; font-size: 40px; line-height: 1; }
+.road-strip { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; align-items: center; padding-block: 24px 40px; }
+.road-text { display: grid; gap: 12px; min-width: 0; }
+.road-text p { color: var(--muted); }
+@media (max-width: 860px) { .road-strip { grid-template-columns: 1fr; } }
+.photos { display: grid; grid-template-columns: 1fr 1.4fr 1fr; gap: 12px; margin-bottom: 28px; }
+.photos img { width: 100%; height: 260px; object-fit: cover; display: block; }
+@media (max-width: 720px) { .photos { grid-template-columns: 1fr 1fr; } .photos img:nth-child(2) { grid-column: 1 / -1; order: -1; } .photos img { height: 200px; } }
+.season-photo { width: 100%; height: 100%; min-height: 220px; object-fit: cover; display: block; }
+.season-wrap { display: grid; grid-template-columns: 1fr 1.3fr; }
+.season-wrap .season { grid-template-columns: 1fr; }
+@media (max-width: 760px) { .season-wrap { grid-template-columns: 1fr; } }
+.car-body { fill: var(--car); }
+.car-shade { fill: var(--rubber); opacity: .25; }
+.glass { fill: var(--glass); opacity: .85; }
+.light { fill: var(--accent); }
+.tail { fill: #ff5a4a; }
+.arch { fill: var(--bg); }
+.tire { fill: var(--rubber); }
+.tread { fill: none; stroke: #2a2d33; stroke-width: 5; stroke-dasharray: 6 5; }
+.rim { fill: var(--rim); }
+.rim-in { fill: var(--panel2); }
+.spoke { fill: var(--rim); }
+.hub { fill: var(--accent); }
+.road { stroke: var(--accent); stroke-width: 5; stroke-dasharray: 34 26; animation: drive 1.2s linear infinite; }
+.ground { stroke: var(--line); stroke-width: 2; }
+.wheel { transform-box: fill-box; transform-origin: center; animation: spin 0.9s linear infinite; }
+@keyframes drive { to { stroke-dashoffset: -60; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .road, .wheel, .big-tire { animation: none; } }
+
+.numbers { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; border-block: 1px solid var(--line); padding-block: 22px; }
+.numbers div { display: grid; gap: 2px; }
+.numbers b { font-family: var(--display); font-weight: 400; font-size: 32px; color: var(--accent); }
+.numbers span { color: var(--muted); font-size: 14px; }
+
+/* Услуги */
+.services { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+.svc { background: var(--panel); border-top: 3px solid var(--accent); padding: 22px; display: grid; gap: 10px; align-content: start; }
+.svc svg { width: 44px; height: 44px; }
+.svc p { color: var(--muted); font-size: 15px; }
+.svc .from { font-family: var(--mono); font-weight: 700; color: var(--accent); }
+.i-line { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Калькулятор */
+.calc { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; align-items: stretch; }
+@media (max-width: 860px) { .calc { grid-template-columns: 1fr; } }
+.calc form, .result { background: var(--panel); padding: 24px; display: grid; gap: 18px; align-content: start; min-width: 0; }
+.field { display: grid; gap: 8px; }
+.field > span { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips input { position: absolute; opacity: 0; pointer-events: none; }
+.chips label { padding: 8px 14px; border: 1px solid var(--line); border-radius: 4px; cursor: pointer; font-weight: 600; font-family: var(--mono); font-size: 14px; }
+.chips input:checked + label { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+.chips input:focus-visible + label { outline: 3px solid var(--accent); outline-offset: 2px; }
+.checks { display: grid; gap: 10px; }
+.checks label { display: flex; gap: 10px; align-items: center; cursor: pointer; }
+.checks input { width: 18px; height: 18px; accent-color: var(--accent); }
+.checks em { font-style: normal; color: var(--muted); font-family: var(--mono); font-size: 13px; margin-left: auto; white-space: nowrap; }
+.result { border-top: 3px solid var(--accent); position: relative; overflow: hidden; }
+.result .total { font-family: var(--display); font-size: clamp(40px, 7vw, 60px); color: var(--accent); font-variant-numeric: tabular-nums; line-height: 1; }
+.result ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-family: var(--mono); font-size: 14px; }
+.result li { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dashed var(--line); padding-bottom: 6px; }
+.result .warn { color: var(--muted); }
+.big-tire { position: absolute; right: -70px; bottom: -70px; width: 220px; height: 220px; opacity: .22; animation: spin 14s linear infinite; pointer-events: none; }
+
+/* Прайс */
+.table-box { overflow-x: auto; border: 1px solid var(--line); }
+table { border-collapse: collapse; width: 100%; min-width: 520px; font-variant-numeric: tabular-nums; }
+th, td { padding: 12px 16px; text-align: right; border-bottom: 1px solid var(--line); }
+th:first-child, td:first-child { text-align: left; }
+thead th { font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); background: var(--panel); }
+td { font-family: var(--mono); }
+td:first-child { font-weight: 700; color: var(--accent); }
+tbody tr:last-child td { border-bottom: 0; }
+.note { font-size: 14px; color: var(--muted); }
+
+/* Расшифровка шины */
+.decode { display: grid; gap: 20px; background: var(--panel); padding: 24px; }
+.decode input { font-family: var(--mono); font-size: 22px; font-weight: 700; padding: 12px 14px; background: var(--bg); color: var(--ink); border: 2px solid var(--line); border-radius: 4px; width: 100%; max-width: 360px; text-transform: uppercase; }
+.decode input:focus { border-color: var(--accent); outline: none; }
+.parts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.part { background: var(--bg); padding: 14px; display: grid; gap: 4px; border-left: 3px solid var(--accent); min-width: 0; }
+.part b { font-family: var(--mono); font-size: 22px; color: var(--accent); }
+.part span { font-size: 14px; color: var(--muted); }
+.decode .err { color: var(--muted); }
+
+/* Шаги работы */
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 0; border: 1px solid var(--line); }
+.step { padding: 20px; display: grid; gap: 8px; align-content: start; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); margin: 0 -1px -1px 0; }
+.step .n { font-family: var(--mono); color: var(--accent); font-weight: 700; }
+.step p { color: var(--muted); font-size: 15px; }
+
+/* Сезон */
+.season { background: var(--accent); color: var(--bg); padding: clamp(22px, 4vw, 36px); display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: center; }
+.season h2 { color: var(--bg); }
+.season .temp { font-family: var(--display); font-size: clamp(48px, 9vw, 80px); line-height: 1; }
+@media (max-width: 560px) { .season { grid-template-columns: 1fr; } }
+
+/* Запись */
+.book { display: grid; grid-template-columns: 1fr 1.3fr; gap: 32px; align-items: start; }
+@media (max-width: 860px) { .book { grid-template-columns: 1fr; } }
+.book form { background: var(--panel); padding: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.book .full { grid-column: 1 / -1; }
+.book label { display: grid; gap: 6px; font-weight: 600; font-size: 14px; min-width: 0; }
+.book input, .book select { font: inherit; padding: 10px 12px; border-radius: 4px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); width: 100%; }
+@media (max-width: 480px) { .book form { grid-template-columns: 1fr; } }
+.slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 6px; }
+.slot { font: inherit; font-family: var(--mono); font-size: 14px; padding: 8px 0; border: 1px solid var(--line); background: var(--bg); color: var(--ink); border-radius: 4px; cursor: pointer; }
+.slot[aria-pressed="true"] { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+.slot:disabled { opacity: .35; text-decoration: line-through; cursor: not-allowed; }
+.done { grid-column: 1 / -1; padding: 12px 14px; background: var(--bg); border-left: 4px solid var(--ok); }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+
+/* FAQ и контакты */
+.bottom { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; }
+@media (max-width: 860px) { .bottom { grid-template-columns: 1fr; } }
+details { border-bottom: 1px solid var(--line); padding-block: 14px; }
+summary { cursor: pointer; font-weight: 700; }
+details p { color: var(--muted); padding-top: 8px; }
+.contacts { background: var(--panel); padding: 24px; display: grid; gap: 16px; align-content: start; }
+.contacts div { display: grid; gap: 2px; }
+.contacts b { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.contacts span { font-size: 18px; font-weight: 600; user-select: all; }
+
+footer { border-top: 1px solid var(--line); padding-block: 24px 40px; color: var(--muted); font-size: 14px; }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+</style>
+
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="wheel">
+      <circle class="tire" r="40"/>
+      <circle class="tread" r="36"/>
+      <circle class="rim" r="25"/>
+      <circle class="rim-in" r="21"/>
+      <rect class="spoke" x="-3" y="-21" width="6" height="21" rx="2"/>
+      <rect class="spoke" x="-3" y="-21" width="6" height="21" rx="2" transform="rotate(72)"/>
+      <rect class="spoke" x="-3" y="-21" width="6" height="21" rx="2" transform="rotate(144)"/>
+      <rect class="spoke" x="-3" y="-21" width="6" height="21" rx="2" transform="rotate(216)"/>
+      <rect class="spoke" x="-3" y="-21" width="6" height="21" rx="2" transform="rotate(288)"/>
+      <circle class="hub" r="6"/>
+    </g>
+  </defs>
+</svg>
+
+<div class="stripe" aria-hidden="true"></div>
+<nav class="nav" aria-label="Разделы">
+  <div class="wrap">
+    <a class="logo" href="#top">Протек<span>тор</span></a>
+    <ul>
+      <li><a href="#calc">Калькулятор</a></li>
+      <li><a href="#price">Прайс</a></li>
+      <li><a href="#tire">Маркировка</a></li>
+      <li><a href="#book">Запись</a></li>
+    </ul>
+    <span class="ph">+7 900 000-00-00</span>
+  </div>
+</nav>
+
+<main id="top">
+  <div class="wrap">
+    <header class="hero">
+      <div>
+        <span class="tag">Шиномонтаж · балансировка · хранение</span>
+        <h1>Переобуем за <em>30&nbsp;минут</em></h1>
+        <p class="lead">Легковые и кроссоверы, радиусы R13–R21. Работаем без записи, но по записи без очереди. Балансируем на новом стенде, грузики входят в цену.</p>
+        <div class="facts"><span>Без выходных</span><span>Оплата картой</span><span>Гарантия 14 дней</span><span>Зона ожидания с кофе</span></div>
+        <div class="btns">
+          <a class="btn" href="#book">Записаться</a>
+          <a class="btn ghost" href="#calc">Посчитать цену</a>
+        </div>
+      </div>
+      <figure class="hero-photo">
+        <img src="img/tire-hero.jpg" alt="Мастер в перчатках проверяет протектор колеса на подъёмнике">
+        <span class="badge"><b>30</b>минут<br>на комплект</span>
+      </figure>
+    </header>
+  </div>
+
+  <div class="wrap road-strip">
+      <svg class="scene" viewBox="0 0 520 270" role="img" aria-label="Красный автомобиль едет по дороге">
+        <line class="ground" x1="0" y1="232" x2="520" y2="232"/>
+        <line class="road" x1="0" y1="252" x2="520" y2="252"/>
+        <path class="car-body" d="M28 196 L28 162 Q30 142 60 136 L132 124 Q172 82 232 76 L330 76 Q372 78 412 120 L470 130 Q496 136 498 162 L498 196 Z"/>
+        <path class="car-shade" d="M28 180 L498 180 L498 196 L28 196 Z"/>
+        <path class="glass" d="M152 126 Q184 92 232 88 L272 88 L272 126 Z"/>
+        <path class="glass" d="M286 88 L328 88 Q362 92 390 126 L286 126 Z"/>
+        <rect class="light" x="474" y="142" width="22" height="10" rx="3"/>
+        <rect class="tail" x="28" y="146" width="12" height="12" rx="2"/>
+        <circle class="arch" cx="130" cy="194" r="48"/>
+        <circle class="arch" cx="400" cy="194" r="48"/>
+        <g transform="translate(130 192)"><use class="wheel" href="#wheel"/></g>
+        <g transform="translate(400 192)"><use class="wheel" href="#wheel"/></g>
+      </svg>
+      <div class="road-text">
+        <span class="tag">Без очереди</span>
+        <h2>Запишитесь онлайн и приезжайте ко времени</h2>
+        <p>Свободные окна видно прямо на сайте. Пока меняем колёса, можно выпить кофе в зоне ожидания.</p>
+      </div>
+  </div>
+
+  <div class="wrap">
+
+    <div class="numbers">
+      <div><b>3 поста</b><span>работают одновременно</span></div>
+      <div><b>30 мин</b><span>на комплект из 4 колёс</span></div>
+      <div><b>R13–R21</b><span>легковые и кроссоверы</span></div>
+      <div><b>400 мест</b><span>на складе хранения</span></div>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="tag">Услуги</span><h2>Что делаем</h2></div>
+      <div class="photos">
+        <img src="img/tire-wrench.jpg" alt="Мастер откручивает колесо пневмогайковёртом" loading="lazy">
+        <img src="img/tire-stack.jpg" alt="Стопки автомобильных шин на складе" loading="lazy">
+        <img src="img/tire-wheel.jpg" alt="Литой диск с шиной крупным планом" loading="lazy">
+      </div>
+      <div class="services">
+        <div class="svc">
+          <svg viewBox="0 0 44 44" aria-hidden="true"><circle class="i-line" cx="22" cy="22" r="17"/><circle class="i-line" cx="22" cy="22" r="7"/></svg>
+          <h3>Сезонная замена</h3><p>Снимаем, монтируем, балансируем и ставим все 4 колеса.</p><span class="from">от 2 400 ₽</span>
+        </div>
+        <div class="svc">
+          <svg viewBox="0 0 44 44" aria-hidden="true"><path class="i-line" d="M8 36 L30 14"/><path class="i-line" d="M26 8 L36 18"/><circle class="i-line" cx="10" cy="34" r="3"/></svg>
+          <h3>Ремонт прокола</h3><p>Жгут снаружи или грибок изнутри. Место утечки ищем в ванне с водой.</p><span class="from">от 400 ₽</span>
+        </div>
+        <div class="svc">
+          <svg viewBox="0 0 44 44" aria-hidden="true"><path class="i-line" d="M6 18 L22 8 L38 18 V38 H6 Z"/><path class="i-line" d="M14 38 V26 H30 V38"/></svg>
+          <h3>Хранение шин</h3><p>Сухой тёплый склад. Каждое колесо в пакете с биркой и вашим номером.</p><span class="from">от 2 000 ₽ / сезон</span>
+        </div>
+        <div class="svc">
+          <svg viewBox="0 0 44 44" aria-hidden="true"><path class="i-line" d="M8 30 A16 16 0 0 1 36 30"/><path class="i-line" d="M22 30 L30 18"/></svg>
+          <h3>Балансировка</h3><p>Если руль дрожит на скорости 80–100 км/ч, дело почти всегда в балансировке.</p><span class="from">от 250 ₽ / колесо</span>
+        </div>
+        <div class="svc">
+          <svg viewBox="0 0 44 44" aria-hidden="true"><path class="i-line" d="M10 34 C 10 20, 34 20, 34 34"/><path class="i-line" d="M22 6 V22"/><path class="i-line" d="M16 12 L22 6 L28 12"/></svg>
+          <h3>Правка дисков</h3><p>Выправляем штампованные и литые диски после ям и бордюров.</p><span class="from">от 800 ₽</span>
+        </div>
+        <div class="svc">
+          <svg viewBox="0 0 44 44" aria-hidden="true"><rect class="i-line" x="14" y="6" width="16" height="32" rx="4"/><path class="i-line" d="M18 14 H26"/></svg>
+          <h3>Подкачка и проверка</h3><p>Давление по табличке на стойке водительской двери, проверка ниппелей.</p><span class="from">бесплатно</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="calc">
+    <div class="wrap">
+      <div class="sec-head"><span class="tag">Калькулятор</span><h2>Сколько будет стоить</h2><p>Выберите радиус и тип диска. Цена окончательная, на месте ничего не добавится.</p></div>
+      <div class="calc">
+        <form id="calcform">
+          <div class="field">
+            <span>Радиус</span>
+            <div class="chips">
+              <input type="radio" name="r" id="r14" value="R13–R14"><label for="r14">R13–14</label>
+              <input type="radio" name="r" id="r15" value="R15"><label for="r15">R15</label>
+              <input type="radio" name="r" id="r16" value="R16" checked><label for="r16">R16</label>
+              <input type="radio" name="r" id="r17" value="R17"><label for="r17">R17</label>
+              <input type="radio" name="r" id="r19" value="R18–R19"><label for="r19">R18–19</label>
+              <input type="radio" name="r" id="r21" value="R20–R21"><label for="r21">R20–21</label>
+            </div>
+          </div>
+          <div class="field">
+            <span>Диск и машина</span>
+            <div class="chips">
+              <input type="radio" name="t" id="t0" value="0"><label for="t0">Штамповка</label>
+              <input type="radio" name="t" id="t1" value="1" checked><label for="t1">Литьё</label>
+              <input type="radio" name="t" id="t2" value="2"><label for="t2">Кроссовер</label>
+            </div>
+          </div>
+          <div class="field">
+            <span>Сколько колёс</span>
+            <div class="chips">
+              <input type="radio" name="c" id="c4" value="4" checked><label for="c4">4 колеса</label>
+              <input type="radio" name="c" id="c2" value="2"><label for="c2">2 колеса</label>
+            </div>
+          </div>
+          <div class="field">
+            <span>Дополнительно</span>
+            <div class="checks">
+              <label><input type="checkbox" id="x-rf"> Run Flat или низкий профиль <em>+20%</em></label>
+              <label><input type="checkbox" id="x-wash"> Мойка колёс <em>100 ₽ / шт</em></label>
+              <label><input type="checkbox" id="x-store"> Хранение на сезон <em>500 ₽ / шт</em></label>
+              <label><input type="checkbox" id="x-valve"> Новые ниппели <em>80 ₽ / шт</em></label>
+            </div>
+          </div>
+        </form>
+        <div class="result" aria-live="polite">
+          <span class="tag">Итого</span>
+          <div class="total" id="total">3 000 ₽</div>
+          <ul id="breakdown"></ul>
+          <a class="btn" href="#book" style="justify-self:start">Записаться на это время</a>
+          <svg class="big-tire" viewBox="-44 -44 88 88" aria-hidden="true"><use href="#wheel"/></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="price">
+    <div class="wrap">
+      <div class="sec-head"><span class="tag">Прайс</span><h2>Комплект из 4 колёс</h2><p>Снятие, установка, монтаж, балансировка и грузики уже внутри.</p></div>
+      <div class="table-box">
+        <table>
+          <thead><tr><th>Радиус</th><th>Штамповка</th><th>Литьё</th><th>Кроссовер</th></tr></thead>
+          <tbody id="pricebody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="tire">
+    <div class="wrap">
+      <div class="sec-head"><span class="tag">Маркировка</span><h2>Что написано на шине</h2><p>Найдите на боковине надпись вида 205/55 R16 91V и впишите её сюда. Покажем, что значит каждая цифра.</p></div>
+      <div class="decode">
+        <input id="size" value="205/55 R16 91V" aria-label="Маркировка шины" autocomplete="off" spellcheck="false">
+        <div class="parts" id="parts"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="tag">Как работаем</span><h2>Пять шагов, 30 минут</h2></div>
+      <div class="steps">
+        <div class="step"><span class="n">01</span><h3>Осмотр</h3><p>Смотрим протектор и боковины, проверяем грыжи и порезы. Если шина опасна, скажем до начала работ.</p></div>
+        <div class="step"><span class="n">02</span><h3>Демонтаж</h3><p>Снимаем колёса пневмогайковёртом и аккуратно разбортовываем, не царапая литьё.</p></div>
+        <div class="step"><span class="n">03</span><h3>Монтаж</h3><p>Ставим шину по стрелке направления вращения, смазываем борт пастой.</p></div>
+        <div class="step"><span class="n">04</span><h3>Балансировка</h3><p>Крутим на стенде, ставим грузики до показаний 0 г. Повторно проверяем.</p></div>
+        <div class="step"><span class="n">05</span><h3>Затяжка</h3><p>Гайки дотягиваем динамометрическим ключом, обычно 110–120 Н·м, крест-накрест.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="season-wrap">
+      <img class="season-photo" src="img/tire-winter.jpg" alt="Красный внедорожник едет по заснеженной дороге" loading="lazy">
+      <div class="season">
+        <div class="temp">+5&nbsp;°C</div>
+        <div style="display:grid;gap:8px">
+          <h2>Пора на зимнюю</h2>
+          <p>Когда ночью стабильно ниже +5 °C, летняя резина дубеет и хуже держит дорогу. В первые морозы очередь доходит до трёх часов, а по записи вас примут ко времени.</p>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="book">
+    <div class="wrap book">
+      <div class="sec-head" style="margin:0">
+        <span class="tag">Запись</span>
+        <h2>Выберите время</h2>
+        <p>Приезжайте за 5 минут до начала. Если опаздываете больше чем на 15 минут, позвоните, перенесём.</p>
+        <div class="legend"><span>Жёлтое: ваше время</span><span>Зачёркнутое: занято</span></div>
+      </div>
+      <form id="bookform">
+        <label class="full">Дата<input id="b-date" type="date" required></label>
+        <div class="full" style="display:grid;gap:6px">
+          <span style="font-weight:600;font-size:14px">Время</span>
+          <div class="slots" id="slots"></div>
+        </div>
+        <label>Услуга
+          <select id="b-svc"><option>Сезонная замена</option><option>Ремонт прокола</option><option>Балансировка</option><option>Хранение шин</option><option>Правка дисков</option></select>
+        </label>
+        <label>Машина<input id="b-car" placeholder="Kia Rio" required></label>
+        <label>Имя<input id="b-name" autocomplete="name" placeholder="Иван" required></label>
+        <label>Телефон<input id="b-phone" type="tel" autocomplete="tel" placeholder="+7 900 000-00-00" required></label>
+        <button class="btn full" type="submit">Записаться</button>
+        <div class="done" id="b-done" hidden></div>
+      </form>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap bottom">
+      <div>
+        <div class="sec-head"><span class="tag">Вопросы</span><h2>Частые вопросы</h2></div>
+        <details><summary>Сколько хранить шины дома нельзя?</summary><p>Можно, но лёжа стопкой, если они на дисках, и стоя, если без дисков. Подальше от батареи и солнца.</p></details>
+        <details><summary>Какая глубина протектора нужна зимой?</summary><p>По правилам не меньше 4 мм. Новая зимняя шина обычно 8–10 мм. Замерим бесплатно.</p></details>
+        <details><summary>Нужно ли балансировать каждый сезон?</summary><p>Да. За сезон грузики слетают, а шина изнашивается неравномерно.</p></details>
+        <details><summary>Можно ли ждать в машине?</summary><p>Машина будет на подъёмнике, поэтому лучше подождать в зоне отдыха. Там есть кофе и Wi-Fi.</p></details>
+      </div>
+      <div class="contacts">
+        <div><b>Адрес</b><span>ул. Заводская, 7, бокс 3</span></div>
+        <div><b>Часы</b><span>Каждый день 8:00–20:00</span></div>
+        <div><b>Телефон</b><span>+7 900 000-00-00</span></div>
+        <div><b>Ориентир</b><span>Въезд со стороны АЗС, жёлтые ворота</span></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© Шиномонтаж «Протектор»</span>
+    <span>Демо-сайт для портфолио. Шиномонтаж вымышленный. Фото: Unsplash.</span>
+  </div>
+</footer>
+
+<script>
+  const PRICES = {
+    'R13–R14': [2400, 2600, null],
+    'R15': [2600, 2800, 3200],
+    'R16': [2800, 3000, 3400],
+    'R17': [3200, 3400, 3800],
+    'R18–R19': [null, 3900, 4400],
+    'R20–R21': [null, 4600, 5200]
+  };
+  const TYPES = ['Штамповка', 'Литьё', 'Кроссовер'];
+  const rub = n => n.toLocaleString('ru-RU') + ' ₽';
+
+  document.getElementById('pricebody').innerHTML = Object.entries(PRICES)
+    .map(([r, p]) => `<tr><td>${r}</td>${p.map(v => `<td>${v ? rub(v) : '—'}</td>`).join('')}</tr>`).join('');
+
+  const form = document.getElementById('calcform');
+  function calc() {
+    const r = form.querySelector('[name=r]:checked').value;
+    const t = +form.querySelector('[name=t]:checked').value;
+    const c = +form.querySelector('[name=c]:checked').value;
+    const base4 = PRICES[r][t];
+    const total = document.getElementById('total');
+    const list = document.getElementById('breakdown');
+    if (!base4) {
+      total.textContent = '—';
+      list.innerHTML = `<li class="warn">${TYPES[t]} в радиусе ${r} не бывает. Выберите другой тип.</li>`;
+      return;
+    }
+    let rows = [];
+    let base = c === 4 ? base4 : Math.round(base4 * 0.55 / 10) * 10;
+    rows.push([`Замена, ${c} шт · ${r}`, base]);
+    if (document.getElementById('x-rf').checked) rows.push(['Run Flat / низкий профиль', Math.round(base * 0.2 / 10) * 10]);
+    if (document.getElementById('x-wash').checked) rows.push(['Мойка колёс', 100 * c]);
+    if (document.getElementById('x-store').checked) rows.push(['Хранение на сезон', 500 * c]);
+    if (document.getElementById('x-valve').checked) rows.push(['Ниппели', 80 * c]);
+    total.textContent = rub(rows.reduce((s, x) => s + x[1], 0));
+    list.innerHTML = rows.map(([n, v]) => `<li><span>${n}</span><span>${rub(v)}</span></li>`).join('');
+  }
+  form.addEventListener('change', calc);
+  calc();
+
+  const LOAD = {75:387,76:400,77:412,78:425,79:437,80:450,81:462,82:475,83:487,84:500,85:515,86:530,87:545,88:560,89:580,90:600,91:615,92:630,93:650,94:670,95:690,96:710,97:730,98:750,99:775,100:800,101:825,102:850,103:875,104:900,105:925,106:950,107:975,108:1000,109:1030,110:1060};
+  const SPEED = {N:140,P:150,Q:160,R:170,S:180,T:190,U:200,H:210,V:240,W:270,Y:300};
+  const sizeInput = document.getElementById('size');
+  function decode() {
+    const m = sizeInput.value.toUpperCase().match(/(\d{3})\s*\/\s*(\d{2})\s*Z?R\s*(\d{2})(?:\s*(\d{2,3})\s*([A-Z]))?/);
+    const out = document.getElementById('parts');
+    if (!m) { out.innerHTML = '<p class="err">Не получилось прочитать. Пример: 205/55 R16 91V</p>'; return; }
+    const [, w, p, r, li, si] = m;
+    const side = Math.round(w * p / 100);
+    const diam = Math.round(r * 25.4 + 2 * side);
+    let cards = [
+      [w + ' мм', 'ширина шины'],
+      [p + '%', `высота боковины от ширины, это ${side} мм`],
+      ['R' + r, `диаметр диска в дюймах, ${Math.round(r * 25.4)} мм`],
+      [diam + ' мм', 'внешний диаметр колеса']
+    ];
+    if (li) cards.push([li, LOAD[li] ? `нагрузка до ${LOAD[li]} кг на колесо` : 'индекс нагрузки']);
+    if (si) cards.push([si, SPEED[si] ? `скорость до ${SPEED[si]} км/ч` : 'индекс скорости']);
+    out.innerHTML = cards.map(([b, s]) => `<div class="part"><b>${b}</b><span>${s}</span></div>`).join('');
+  }
+  sizeInput.addEventListener('input', decode);
+  decode();
+
+  const date = document.getElementById('b-date');
+  const localDay = d => new Date(d - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  const today = localDay(new Date());
+  date.min = today;
+  date.value = new Date().getHours() >= 19 ? localDay(new Date(Date.now() + 864e5)) : today;
+  let chosen = null;
+  function renderSlots() {
+    const seed = date.value.split('-').reduce((s, x) => s + +x, 0);
+    const box = document.getElementById('slots');
+    box.innerHTML = '';
+    chosen = null;
+    for (let i = 0; i < 24; i++) {
+      const h = 8 + Math.floor(i / 2), m = i % 2 ? '30' : '00';
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'slot';
+      b.textContent = `${h}:${m}`;
+      b.setAttribute('aria-pressed', 'false');
+      const now = new Date();
+      const past = date.value === today && (h < now.getHours() || (h === now.getHours() && +m <= now.getMinutes()));
+      b.disabled = past || (i * 7 + seed) % 4 === 0;
+      b.addEventListener('click', () => {
+        box.querySelectorAll('.slot').forEach(s => s.setAttribute('aria-pressed', 'false'));
+        b.setAttribute('aria-pressed', 'true');
+        chosen = b.textContent;
+      });
+      box.appendChild(b);
+    }
+  }
+  date.addEventListener('change', renderSlots);
+  renderSlots();
+
+  document.getElementById('bookform').addEventListener('submit', e => {
+    e.preventDefault();
+    const done = document.getElementById('b-done');
+    if (!chosen) { done.textContent = 'Выберите время в списке выше.'; done.hidden = false; return; }
+    const d = new Date(date.value).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+    done.textContent = `${document.getElementById('b-name').value.trim()}, ждём ${document.getElementById('b-car').value.trim()} ${d} в ${chosen}: ${document.getElementById('b-svc').value.toLowerCase()}. Это демо: заявка никуда не отправилась.`;
+    done.hidden = false;
+  });
+</script>
+
+<a class="pf-back" href="../index.html">&larr; Портфолио</a>
+<script>
+  // Кнопки-ссылки на разделы плавно прокручивают страницу, а не перескакивают
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const target = document.getElementById(a.getAttribute('href').slice(1));
+    if (!target) return;
+    e.preventDefault();
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  });
+</script></body>
+</html>

@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Барбершоп «Бритва»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=IBM+Plex+Sans:wght@400;600;700&display=swap">
+<style>
+/* Плавная прокрутка к разделам; отступ под закреплённое меню */
+html { scroll-behavior: smooth; }
+[id] { scroll-margin-top: 84px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style><style>
+/* Layout: тёмный зал с кирпичом и латунью. Фото во весь экран, прайс как доска мелом, запись с выбором мастера */
+:root {
+  --bg: #121010;
+  --panel: #1c1917;
+  --panel2: #26211e;
+  --ink: #f1ebe3;
+  --muted: #a89f94;
+  --brass: #c99a55;
+  --brick: #a5452f;
+  --line: #2e2925;
+  --display: "Oswald", "Arial Narrow", sans-serif;
+  --body: "IBM Plex Sans", system-ui, sans-serif;
+  color-scheme: dark;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.6; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+img { max-width: 100%; display: block; }
+[hidden] { display: none !important; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--display); font-weight: 700; text-transform: uppercase; letter-spacing: .02em; line-height: 1.05; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(44px, 9vw, 104px); }
+h2 { font-size: clamp(30px, 5vw, 48px); }
+h3 { font-size: 22px; font-weight: 500; }
+p { margin: 0; }
+a { color: var(--brass); }
+:focus-visible { outline: 3px solid var(--brass); outline-offset: 3px; }
+.kicker { font-size: 13px; letter-spacing: .18em; text-transform: uppercase; color: var(--brass); font-weight: 700; }
+section { padding-block: 72px; }
+.head { display: grid; gap: 10px; margin-bottom: 32px; max-width: 42em; }
+.head p { color: var(--muted); }
+.btn { display: inline-block; font: inherit; font-family: var(--display); font-weight: 500; text-transform: uppercase; letter-spacing: .08em; font-size: 17px; padding: 14px 26px; border: 2px solid var(--brass); background: var(--brass); color: var(--bg); text-decoration: none; cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
+
+/* Навигация */
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 6; background: rgba(18, 16, 16, .92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 12px; }
+.logo { font-family: var(--display); font-weight: 700; font-size: 24px; letter-spacing: .14em; color: var(--ink); text-decoration: none; text-transform: uppercase; }
+.logo span { color: var(--brass); }
+.nav ul { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; }
+.nav ul a { color: var(--ink); text-decoration: none; font-weight: 600; font-size: 15px; }
+.nav .btn { padding: 8px 16px; font-size: 15px; }
+@media (max-width: 780px) { .nav ul { display: none; } }
+
+/* Первый экран */
+.hero { position: relative; min-height: 560px; display: grid; align-items: end; overflow: hidden; }
+.hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, var(--bg) 4%, rgba(18,16,16,.55) 50%, rgba(18,16,16,.25)); }
+.hero .wrap { position: relative; z-index: 1; display: grid; gap: 20px; padding-block: 120px 56px; width: 100%; }
+.hero .lead { font-size: 19px; max-width: 32em; color: #e2d9cd; }
+.btns { display: flex; flex-wrap: wrap; gap: 12px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips span { border: 1px solid rgba(241,235,227,.35); padding: 6px 12px; font-size: 14px; font-weight: 600; }
+
+/* Прайс */
+.board { background: var(--panel); border: 1px solid var(--line); padding: clamp(20px, 4vw, 40px); display: grid; grid-template-columns: 1fr 1fr; gap: 8px 48px; }
+@media (max-width: 760px) { .board { grid-template-columns: 1fr; } }
+.svc { display: grid; grid-template-columns: 1fr auto; gap: 2px 16px; padding-block: 14px; border-bottom: 1px dashed var(--line); }
+.svc b { font-family: var(--display); font-weight: 500; font-size: 20px; text-transform: uppercase; letter-spacing: .03em; }
+.svc .price { font-family: var(--display); font-size: 22px; color: var(--brass); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.svc small { grid-column: 1 / -1; color: var(--muted); font-size: 14px; }
+.svc .time { color: var(--muted); font-size: 14px; }
+.board-note { grid-column: 1 / -1; color: var(--muted); font-size: 14px; padding-top: 12px; }
+
+/* Работы */
+.works { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 220px; gap: 10px; }
+.works figure { margin: 0; position: relative; overflow: hidden; min-width: 0; }
+.works img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.works figure:hover img { transform: scale(1.04); }
+.works figcaption { position: absolute; left: 0; bottom: 0; padding: 8px 12px; background: rgba(18,16,16,.8); font-size: 14px; font-weight: 600; }
+.works .big { grid-column: span 2; grid-row: span 2; }
+.works .tall { grid-row: span 2; }
+@media (max-width: 760px) { .works { grid-template-columns: 1fr 1fr; grid-auto-rows: 170px; } .works .tall { grid-row: span 1; } }
+@media (prefers-reduced-motion: reduce) { .works img { transition: none; } }
+
+/* Мастера */
+.team { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+.barber { background: var(--panel); padding: 24px; display: grid; gap: 12px; align-content: start; border-top: 3px solid var(--brick); }
+.avatar { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; background: var(--panel2); border: 2px solid var(--brass); font-family: var(--display); font-size: 28px; color: var(--brass); }
+.barber .lvl { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--brass); font-weight: 700; }
+.barber p { color: var(--muted); font-size: 15px; }
+.team-note { color: var(--muted); font-size: 14px; margin-top: 14px; }
+
+/* Карта гостя */
+.loyal { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: center; background: var(--brick); padding: clamp(24px, 4vw, 40px); }
+.loyal p { color: #f5ddd4; max-width: 30em; }
+.stamps { display: grid; grid-template-columns: repeat(6, 44px); gap: 10px; }
+.stamp { width: 44px; height: 44px; border-radius: 50%; border: 2px dashed rgba(255,255,255,.6); display: grid; place-items: center; }
+.stamp.on { background: var(--ink); border: 0; }
+.stamp.on svg { width: 22px; height: 22px; }
+.stamp.free { border-style: solid; font-family: var(--display); font-size: 13px; color: #fff; }
+@media (max-width: 640px) { .loyal { grid-template-columns: 1fr; } }
+.razor-ic { fill: none; stroke: var(--brick); stroke-width: 2.5; stroke-linecap: round; }
+
+/* Запись */
+.book { display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; align-items: start; }
+@media (max-width: 900px) { .book { grid-template-columns: 1fr; } }
+.book form { background: var(--panel); padding: 24px; display: grid; gap: 22px; min-width: 0; }
+.step-t { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 700; margin-bottom: 10px; display: block; }
+.pick { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+#barbers { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+.pick input { position: absolute; opacity: 0; pointer-events: none; }
+.pick label { display: grid; gap: 2px; padding: 12px 14px; border: 1px solid var(--line); cursor: pointer; background: var(--bg); }
+.pick label small { color: var(--muted); font-size: 13px; }
+.pick input:checked + label { border-color: var(--brass); box-shadow: inset 0 0 0 1px var(--brass); }
+.pick input:focus-visible + label { outline: 3px solid var(--brass); outline-offset: 2px; }
+.slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 6px; }
+.slot { font: inherit; font-size: 14px; padding: 8px 0; border: 1px solid var(--line); background: var(--bg); color: var(--ink); cursor: pointer; font-variant-numeric: tabular-nums; }
+.slot[aria-pressed="true"] { background: var(--brass); color: var(--bg); border-color: var(--brass); }
+.slot:disabled { opacity: .3; text-decoration: line-through; cursor: not-allowed; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 480px) { .row2 { grid-template-columns: 1fr; } }
+.book label.f { display: grid; gap: 6px; font-weight: 600; font-size: 14px; min-width: 0; }
+.book input[type=text], .book input[type=tel], .book input[type=date] { font: inherit; padding: 10px 12px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); width: 100%; }
+.summary { background: var(--panel2); padding: 24px; display: grid; gap: 14px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 80px); }
+.summary .sum { font-family: var(--display); font-size: 48px; color: var(--brass); line-height: 1; font-variant-numeric: tabular-nums; }
+.summary ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.summary li { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dashed var(--line); padding-bottom: 6px; font-size: 15px; }
+.summary li span:first-child { color: var(--muted); }
+.done { padding: 12px 14px; border-left: 4px solid var(--brass); background: var(--bg); }
+
+/* Контакты */
+.bottom { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; }
+@media (max-width: 860px) { .bottom { grid-template-columns: 1fr; } }
+details { border-bottom: 1px solid var(--line); padding-block: 14px; }
+summary { cursor: pointer; font-weight: 700; }
+details p { color: var(--muted); padding-top: 8px; }
+.contacts { background: var(--panel); padding: 24px; display: grid; gap: 16px; align-content: start; }
+.contacts div { display: grid; gap: 2px; }
+.contacts b { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.contacts span { font-size: 18px; font-weight: 600; user-select: all; }
+footer { border-top: 1px solid var(--line); padding-block: 24px 80px; color: var(--muted); font-size: 14px; }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+
+.pf-back { position: fixed; z-index: 50; left: max(12px, env(safe-area-inset-left, 0px)); bottom: calc(12px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--bg); font: 600 14px var(--body); padding: 10px 16px; border-radius: 999px; text-decoration: none; box-shadow: 0 4px 16px rgba(0,0,0,.4); }
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="Разделы">
+  <div class="wrap">
+    <a class="logo" href="#top">Брит<span>ва</span></a>
+    <ul>
+      <li><a href="#price">Цены</a></li>
+      <li><a href="#works">Работы</a></li>
+      <li><a href="#team">Мастера</a></li>
+      <li><a href="#contacts">Контакты</a></li>
+    </ul>
+    <a class="btn" href="#book">Записаться</a>
+  </div>
+</nav>
+
+<main id="top">
+  <header class="hero">
+    <img src="img/barber-hero.jpg" alt="Зал барбершопа: три кожаных кресла, кирпичная стена и лампы над зеркалами">
+    <div class="wrap">
+      <span class="kicker">Мужские стрижки и бритьё · с 10:00 до 22:00</span>
+      <h1>Стрижка,<br>как вы любите</h1>
+      <p class="lead">Классика, фейды и борода. Мастер сначала спросит, как вы обычно укладываетесь, и только потом возьмёт машинку. Кофе или лимонад, пока ждёте.</p>
+      <div class="btns">
+        <a class="btn" href="#book">Записаться онлайн</a>
+        <a class="btn ghost" href="#price">Смотреть цены</a>
+      </div>
+      <div class="chips"><span>4 кресла</span><span>Без очереди по записи</span><span>Детские стрижки с 6 лет</span></div>
+    </div>
+  </header>
+
+  <section id="price">
+    <div class="wrap">
+      <div class="head">
+        <span class="kicker">Прайс</span>
+        <h2>Услуги и цены</h2>
+        <p>Цены у барбера. У старшего барбера на 20% выше: он работает дольше 7 лет и берёт сложные стрижки.</p>
+      </div>
+      <div class="board">
+        <div class="svc"><b>Мужская стрижка</b><span class="price">1 500 ₽</span><span class="time">60 минут</span><small>Ножницы и машинка, мытьё головы, укладка.</small></div>
+        <div class="svc"><b>Стрижка машинкой</b><span class="price">900 ₽</span><span class="time">30 минут</span><small>Одна или две насадки, окантовка.</small></div>
+        <div class="svc"><b>Фейд</b><span class="price">1 700 ₽</span><span class="time">60 минут</span><small>Плавный переход от кожи, низкий, средний или высокий.</small></div>
+        <div class="svc"><b>Моделирование бороды</b><span class="price">900 ₽</span><span class="time">30 минут</span><small>Форма, контур опасной бритвой, масло.</small></div>
+        <div class="svc"><b>Королевское бритьё</b><span class="price">1 600 ₽</span><span class="time">45 минут</span><small>Горячее полотенце, пена с помазком, опасная бритва.</small></div>
+        <div class="svc"><b>Отец и сын</b><span class="price">2 400 ₽</span><span class="time">90 минут</span><small>Две стрижки подряд в соседних креслах.</small></div>
+        <div class="svc"><b>Детская стрижка</b><span class="price">1 000 ₽</span><span class="time">40 минут</span><small>Для мальчиков от 6 до 12 лет.</small></div>
+        <div class="svc"><b>Камуфляж седины</b><span class="price">800 ₽</span><span class="time">20 минут</span><small>Тонировка, после неё седина выглядит естественно.</small></div>
+        <p class="board-note">Стрижка и борода вместе: 2 200 ₽ вместо 2 400 ₽.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="works">
+    <div class="wrap">
+      <div class="head"><span class="kicker">Работы</span><h2>Как это выглядит</h2></div>
+      <div class="works">
+        <figure class="big"><img src="img/barber-cut.jpg" alt="Барбер стрижёт клиента ножницами" loading="lazy"><figcaption>Стрижка ножницами</figcaption></figure>
+        <figure class="tall"><img src="img/barber-razor.jpg" alt="Барбер с татуировками подравнивает контур опасной бритвой" loading="lazy"><figcaption>Контур бритвой</figcaption></figure>
+        <figure><img src="img/barber-beard.jpg" alt="Чёрно-белое фото: мастер стрижёт бороду" loading="lazy"><figcaption>Борода</figcaption></figure>
+        <figure><img src="img/barber-tools.jpg" alt="Машинки для стрижки, ножницы, расчёска и средства для укладки" loading="lazy"><figcaption>Инструменты</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="team">
+    <div class="wrap">
+      <div class="head"><span class="kicker">Мастера</span><h2>Кто вас пострижёт</h2></div>
+      <div class="team">
+        <div class="barber"><div class="avatar">А</div><span class="lvl">Старший барбер · 9 лет</span><h3>Артём</h3><p>Классические стрижки и королевское бритьё. Учит новых мастеров.</p></div>
+        <div class="barber"><div class="avatar">И</div><span class="lvl">Барбер · 4 года</span><h3>Илья</h3><p>Фейды и текстурные стрижки. Подскажет, что пойдёт к форме лица.</p></div>
+        <div class="barber"><div class="avatar">М</div><span class="lvl">Барбер · 3 года</span><h3>Марк</h3><p>Борода и детские стрижки. Терпеливый, дети его любят.</p></div>
+      </div>
+      <p class="team-note">Мастера вымышленные. На настоящем сайте здесь будут фото и имена команды.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="loyal">
+        <div style="display:grid;gap:12px">
+          <span class="kicker" style="color:#fff">Карта гостя</span>
+          <h2>Шестая стрижка в подарок</h2>
+          <p>За каждый визит ставим штамп. Пять штампов собрали, шестая стрижка бесплатно. Карту можно не носить, мы найдём вас по номеру телефона.</p>
+        </div>
+        <div class="stamps" aria-label="Пример карты: три штампа из пяти">
+          <div class="stamp on"><svg viewBox="0 0 22 22" aria-hidden="true"><path class="razor-ic" d="M4 16 L16 4 M12 4 H18 V10"/></svg></div>
+          <div class="stamp on"><svg viewBox="0 0 22 22" aria-hidden="true"><path class="razor-ic" d="M4 16 L16 4 M12 4 H18 V10"/></svg></div>
+          <div class="stamp on"><svg viewBox="0 0 22 22" aria-hidden="true"><path class="razor-ic" d="M4 16 L16 4 M12 4 H18 V10"/></svg></div>
+          <div class="stamp"></div>
+          <div class="stamp"></div>
+          <div class="stamp free">0 ₽</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="book">
+    <div class="wrap">
+      <div class="head"><span class="kicker">Запись</span><h2>Записаться онлайн</h2><p>Выберите мастера, услуги и время. Цену и длительность видно сразу.</p></div>
+      <div class="book">
+        <form id="bookform">
+          <div>
+            <span class="step-t">1. Мастер</span>
+            <div class="pick" id="barbers">
+              <input type="radio" name="barber" id="br-any" value="any" checked><label for="br-any"><b>Любой</b><small>ближайшее время</small></label>
+              <input type="radio" name="barber" id="br-a" value="Артём"><label for="br-a"><b>Артём</b><small>старший, +20%</small></label>
+              <input type="radio" name="barber" id="br-i" value="Илья"><label for="br-i"><b>Илья</b><small>барбер</small></label>
+              <input type="radio" name="barber" id="br-m" value="Марк"><label for="br-m"><b>Марк</b><small>барбер</small></label>
+            </div>
+          </div>
+          <div>
+            <span class="step-t">2. Услуги</span>
+            <div class="pick" id="services">
+              <input type="checkbox" id="s-cut" data-p="1500" data-t="60" checked><label for="s-cut"><b>Стрижка</b><small>1 500 ₽ · 60 мин</small></label>
+              <input type="checkbox" id="s-fade" data-p="1700" data-t="60"><label for="s-fade"><b>Фейд</b><small>1 700 ₽ · 60 мин</small></label>
+              <input type="checkbox" id="s-beard" data-p="900" data-t="30"><label for="s-beard"><b>Борода</b><small>900 ₽ · 30 мин</small></label>
+              <input type="checkbox" id="s-shave" data-p="1600" data-t="45"><label for="s-shave"><b>Бритьё</b><small>1 600 ₽ · 45 мин</small></label>
+              <input type="checkbox" id="s-clip" data-p="900" data-t="30"><label for="s-clip"><b>Машинкой</b><small>900 ₽ · 30 мин</small></label>
+              <input type="checkbox" id="s-gray" data-p="800" data-t="20"><label for="s-gray"><b>Камуфляж</b><small>800 ₽ · 20 мин</small></label>
+            </div>
+          </div>
+          <div>
+            <span class="step-t">3. Дата и время</span>
+            <label class="f" style="margin-bottom:10px">Дата<input type="date" id="b-date" required></label>
+            <div class="slots" id="slots"></div>
+          </div>
+          <div class="row2">
+            <label class="f">Имя<input type="text" id="b-name" autocomplete="name" placeholder="Дмитрий" required></label>
+            <label class="f">Телефон<input type="tel" id="b-phone" autocomplete="tel" placeholder="+7 900 000-00-00" required></label>
+          </div>
+          <button class="btn" type="submit">Записаться</button>
+          <div class="done" id="b-done" hidden></div>
+        </form>
+        <aside class="summary" aria-live="polite">
+          <span class="kicker">Ваш визит</span>
+          <div class="sum" id="sum">1 500 ₽</div>
+          <ul>
+            <li><span>Мастер</span><span id="sm-barber">Любой</span></li>
+            <li><span>Услуги</span><span id="sm-svc">Стрижка</span></li>
+            <li><span>Длительность</span><span id="sm-time">60 мин</span></li>
+            <li><span>Когда</span><span id="sm-when">выберите время</span></li>
+          </ul>
+          <p style="color:var(--muted);font-size:14px">Стрижка и борода вместе стоят на 200 ₽ дешевле. Скидка уже учтена.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacts">
+    <div class="wrap bottom">
+      <div>
+        <div class="head"><span class="kicker">Вопросы</span><h2>Частые вопросы</h2></div>
+        <details><summary>Можно прийти без записи?</summary><p>Можно, если есть свободное кресло. Вечером и в субботу лучше записаться заранее.</p></details>
+        <details><summary>Как часто нужно стричься?</summary><p>Фейд держит форму 2–3 недели, классическая стрижка 4–5 недель.</p></details>
+        <details><summary>Что если я опаздываю?</summary><p>Подождём 10 минут. Если опаздываете сильнее, позвоните, и мы перенесём время.</p></details>
+        <details><summary>Есть подарочные сертификаты?</summary><p>Да, на любую сумму от 1 500 ₽. Действуют полгода.</p></details>
+      </div>
+      <div class="contacts">
+        <div><b>Адрес</b><span>пр. Мира, 41, вход со двора</span></div>
+        <div><b>Часы</b><span>Каждый день 10:00–22:00</span></div>
+        <div><b>Телефон</b><span>+7 900 000-00-00</span></div>
+        <div><b>Парковка</b><span>Во дворе, 6 мест для гостей</span></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© Барбершоп «Бритва»</span>
+    <span>Демо-сайт для портфолио. Барбершоп вымышленный. Фото: Unsplash.</span>
+  </div>
+</footer>
+
+<a class="pf-back" href="../index.html">← Портфолио</a>
+
+<script>
+  const rub = n => n.toLocaleString('ru-RU') + ' ₽';
+  const form = document.getElementById('bookform');
+  const date = document.getElementById('b-date');
+  const localDay = d => new Date(d - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  const today = localDay(new Date());
+  date.min = today;
+  date.value = new Date().getHours() >= 19 ? localDay(new Date(Date.now() + 864e5)) : today;
+  let chosen = null;
+
+  function update() {
+    const barber = form.querySelector('[name=barber]:checked').value;
+    const picked = [...document.querySelectorAll('#services input:checked')];
+    let price = picked.reduce((s, i) => s + +i.dataset.p, 0);
+    const time = picked.reduce((s, i) => s + +i.dataset.t, 0);
+    const ids = picked.map(i => i.id);
+    if ((ids.includes('s-cut') || ids.includes('s-fade')) && ids.includes('s-beard')) price -= 200;
+    if (barber === 'Артём') price = Math.round(price * 1.2 / 10) * 10;
+    document.getElementById('sum').textContent = picked.length ? rub(price) : '—';
+    document.getElementById('sm-barber').textContent = barber === 'any' ? 'Любой' : barber;
+    document.getElementById('sm-svc').textContent = picked.length ? picked.map(i => i.nextElementSibling.querySelector('b').textContent).join(', ') : 'не выбраны';
+    document.getElementById('sm-time').textContent = time ? `${time} мин` : '—';
+    const d = new Date(date.value + 'T00:00').toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+    document.getElementById('sm-when').textContent = chosen ? `${d}, ${chosen}` : 'выберите время';
+  }
+
+  function renderSlots() {
+    const box = document.getElementById('slots');
+    const seed = date.value.split('-').reduce((s, x) => s + +x, 0) + form.querySelector('[name=barber]:checked').value.length;
+    box.innerHTML = '';
+    chosen = null;
+    for (let h = 10; h < 22; h++) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'slot';
+      b.textContent = `${h}:00`;
+      b.setAttribute('aria-pressed', 'false');
+      const past = date.value === today && h <= new Date().getHours();
+      b.disabled = past || (h * 5 + seed) % 3 === 0;
+      b.addEventListener('click', () => {
+        box.querySelectorAll('.slot').forEach(s => s.setAttribute('aria-pressed', 'false'));
+        b.setAttribute('aria-pressed', 'true');
+        chosen = b.textContent;
+        update();
+      });
+      box.appendChild(b);
+    }
+    update();
+  }
+
+  document.getElementById('barbers').addEventListener('change', renderSlots);
+  document.getElementById('services').addEventListener('change', update);
+  date.addEventListener('change', renderSlots);
+  renderSlots();
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const done = document.getElementById('b-done');
+    if (!document.querySelector('#services input:checked')) { done.textContent = 'Выберите хотя бы одну услугу.'; done.hidden = false; return; }
+    if (!chosen) { done.textContent = 'Выберите время.'; done.hidden = false; return; }
+    done.textContent = `${document.getElementById('b-name').value.trim()}, вы записаны: ${document.getElementById('sm-when').textContent}. Это демо, заявка никуда не отправилась.`;
+    done.hidden = false;
+  });
+</script>
+<script>
+  // Кнопки-ссылки на разделы плавно прокручивают страницу, а не перескакивают
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const target = document.getElementById(a.getAttribute('href').slice(1));
+    if (!target) return;
+    e.preventDefault();
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  });
+</script></body>
+</html>

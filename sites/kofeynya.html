@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+/* Плавная прокрутка к разделам; отступ под закреплённое меню */
+html { scroll-behavior: smooth; }
+[id] { scroll-margin-top: 84px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}
+.pf-back{position:fixed;z-index:50;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));background:#1f2a24;color:#fff;font:600 14px system-ui,sans-serif;padding:10px 16px;border-radius:999px;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,.3)}</style><title>Кофейня «Зерно»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=Manrope:wght@400;600;800&display=swap">
+<style>
+/* Layout: сверху чашка латте крупным планом, ниже меню на «бумаге», путь зерна по шагам, бронь столика и как добраться */
+:root {
+  --bg: #eef1ec;
+  --paper: #fbfcf9;
+  --ink: #1f2a24;
+  --muted: #5d6b62;
+  --accent: #2f6b4f;
+  --crema: #b9853f;
+  --foam: #f6ead6;
+  --bean: #5a3a22;
+  --cup: #ffffff;
+  --line: #cfd8d0;
+  --display: "Yeseva One", Georgia, serif;
+  --body: "Manrope", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #141a17; --paper: #1b231f; --ink: #e8eee9; --muted: #9aaaa0; --accent: #7cc4a0;
+  --crema: #d9a862; --foam: #f1e2c8; --bean: #9a6a42; --cup: #dfe6e1; --line: #2c3832; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #141a17; --paper: #1b231f; --ink: #e8eee9; --muted: #9aaaa0; --accent: #7cc4a0;
+  --crema: #d9a862; --foam: #f1e2c8; --bean: #9a6a42; --cup: #dfe6e1; --line: #2c3832; color-scheme: dark }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.6; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; text-wrap: balance; margin: 0; line-height: 1.1; }
+h1 { font-size: clamp(48px, 9vw, 92px); }
+h2 { font-size: clamp(30px, 4.5vw, 42px); }
+h3 { font-size: 22px; }
+p { margin: 0; }
+.eyebrow { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); font-weight: 800; }
+section { padding-block: 64px; }
+.sec-head { display: grid; gap: 10px; margin-bottom: 32px; max-width: 40em; }
+.sec-head p { color: var(--muted); }
+a { color: var(--accent); }
+:focus-visible { outline: 3px solid var(--crema); outline-offset: 3px; }
+
+/* Навигация */
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 12px; }
+.logo { font-family: var(--display); font-size: 26px; text-decoration: none; color: var(--ink); }
+.nav ul { display: flex; gap: 20px; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
+.nav ul a { color: var(--ink); text-decoration: none; font-weight: 600; font-size: 15px; }
+@media (max-width: 640px) { .nav ul { display: none; } }
+
+.btn { display: inline-block; padding: 12px 22px; border-radius: 999px; font-weight: 800; text-decoration: none; border: 2px solid var(--accent); color: var(--accent); background: transparent; font: inherit; font-weight: 800; cursor: pointer; }
+.btn.primary { background: var(--accent); color: var(--paper); }
+
+/* Первый экран */
+.hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 40px; align-items: center; padding-block: 48px 32px; }
+.hero > div { display: grid; gap: 20px; min-width: 0; }
+.hero .lead { font-size: 19px; color: var(--muted); max-width: 32em; }
+.btns { display: flex; flex-wrap: wrap; gap: 12px; }
+.art { width: 100%; max-width: 480px; justify-self: center; }
+@media (max-width: 820px) { .hero { grid-template-columns: 1fr; } .art { max-width: 360px; } }
+.saucer { fill: var(--cup); stroke: var(--line); stroke-width: 2; }
+.ring { fill: none; stroke: var(--line); stroke-width: 2; }
+.cup { fill: var(--cup); stroke: var(--line); stroke-width: 3; }
+.foam { fill: var(--foam); }
+.spoon { fill: var(--muted); opacity: .55; }
+.bean ellipse { fill: var(--bean); }
+.bean path { fill: none; stroke: var(--bg); stroke-width: 2.5; stroke-linecap: round; }
+.latte { animation: swirl 40s linear infinite; transform-origin: 240px 230px; }
+@keyframes swirl { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .latte { animation: none; } }
+
+.hero-photo { margin: 0; position: relative; justify-self: center; width: 100%; max-width: 460px; }
+.hero-photo img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 200px 200px 8px 8px; }
+.badge { position: absolute; left: -12px; bottom: 28px; background: var(--accent); color: var(--paper); font-weight: 800; font-size: 14px; line-height: 1.25; padding: 14px 16px; border-radius: 50%; width: 104px; height: 104px; display: grid; place-items: center; text-align: center; transform: rotate(-10deg); }
+@media (max-width: 820px) { .hero-photo { max-width: 380px; } .badge { left: 8px; } }
+.gallery { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; padding-block: 40px 0; }
+.gallery figure { margin: 0; display: grid; gap: 8px; min-width: 0; }
+.gallery img { width: 100%; height: 320px; object-fit: cover; border-radius: 8px; display: block; }
+.gallery figcaption { font-size: 14px; color: var(--muted); }
+@media (max-width: 720px) { .gallery { grid-template-columns: 1fr 1fr; } .gallery figure:first-child { grid-column: 1 / -1; } .gallery img { height: 220px; } }
+.wide-photo { width: 100%; height: clamp(220px, 34vw, 380px); object-fit: cover; border-radius: 8px; display: block; margin-bottom: 36px; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 20px; border-block: 1px solid var(--line); padding-block: 24px; }
+.facts div { display: grid; gap: 2px; }
+.facts b { font-family: var(--display); font-weight: 400; font-size: 34px; color: var(--accent); font-variant-numeric: tabular-nums; }
+.facts span { color: var(--muted); font-size: 15px; }
+
+/* Путь зерна */
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 28px; counter-reset: s; }
+.step { display: grid; gap: 10px; align-content: start; }
+.step svg { width: 64px; height: 64px; }
+.step .n { font-size: 13px; font-weight: 800; color: var(--crema); letter-spacing: .1em; }
+.step p { color: var(--muted); font-size: 15px; }
+.ico-line { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.ico-fill { fill: var(--crema); }
+
+/* Меню */
+.menu { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: clamp(20px, 4vw, 40px); display: grid; gap: 24px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.tab { font: inherit; font-weight: 700; padding: 8px 16px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.panel { display: grid; gap: 14px; }
+.item { display: grid; grid-template-columns: 1fr auto; gap: 2px 16px; }
+.item .row { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
+.item .name { font-weight: 700; }
+.item .vol { color: var(--muted); font-size: 14px; white-space: nowrap; }
+.item .dots { flex: 1; border-bottom: 2px dotted var(--line); transform: translateY(-4px); min-width: 16px; }
+.item .price { font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.item .desc { grid-column: 1 / -1; color: var(--muted); font-size: 14px; }
+.note { font-size: 14px; color: var(--muted); }
+
+/* Акция */
+.offer { display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: center; background: var(--accent); color: var(--paper); border-radius: 8px; padding: clamp(24px, 4vw, 40px); }
+.offer h2 { color: var(--paper); }
+.offer p { opacity: .9; }
+.offer svg { width: 120px; height: 120px; }
+.offer .o-fill { fill: var(--paper); opacity: .95; }
+.offer .o-cr { fill: var(--crema); }
+@media (max-width: 560px) { .offer { grid-template-columns: 1fr; } }
+
+/* Зерно с собой */
+.packs { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; }
+.pack { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 22px; display: grid; gap: 12px; align-content: start; }
+.pack svg { width: 72px; height: 90px; }
+.pack .bag { fill: var(--crema); }
+.pack .label { fill: var(--paper); }
+.pack .tag-line { stroke: var(--bean); stroke-width: 3; }
+.notes { color: var(--muted); font-size: 15px; }
+.roast { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+.roast i { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--bean); }
+.roast i.on { background: var(--bean); }
+.pack .p { font-weight: 800; font-variant-numeric: tabular-nums; }
+
+/* Отзывы */
+.reviews { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+.review { border-top: 2px solid var(--crema); padding-top: 16px; display: grid; gap: 10px; }
+.review p { font-size: 17px; }
+.review span { color: var(--muted); font-size: 14px; }
+
+/* Бронь */
+.book { display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; align-items: start; }
+@media (max-width: 820px) { .book { grid-template-columns: 1fr; } }
+form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 24px; }
+form .full { grid-column: 1 / -1; }
+label { display: grid; gap: 6px; font-weight: 600; font-size: 14px; min-width: 0; }
+input, select { font: inherit; padding: 10px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); width: 100%; }
+@media (max-width: 480px) { form { grid-template-columns: 1fr; } }
+.done { grid-column: 1 / -1; padding: 12px 14px; border-radius: 6px; background: var(--bg); border-left: 4px solid var(--accent); }
+
+/* Контакты */
+.visit { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 32px; }
+.visit > div { display: grid; gap: 14px; align-content: start; min-width: 0; }
+.hours { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.hours td { padding: 8px 0; border-bottom: 1px solid var(--line); }
+.hours td:last-child { text-align: right; font-weight: 700; }
+.contact b { display: block; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.contact span { font-size: 18px; font-weight: 700; user-select: all; }
+.map { width: 100%; border-radius: 8px; border: 1px solid var(--line); background: var(--paper); }
+.map .street { stroke: var(--line); stroke-width: 14; stroke-linecap: round; fill: none; }
+.map .park { fill: var(--accent); opacity: .18; }
+.map .pin { fill: var(--crema); }
+.map text { fill: var(--muted); font: 600 12px var(--body); }
+details { border-bottom: 1px solid var(--line); padding-block: 12px; }
+summary { cursor: pointer; font-weight: 700; }
+details p { color: var(--muted); padding-top: 8px; }
+
+footer { border-top: 1px solid var(--line); padding-block: 24px 40px; color: var(--muted); font-size: 14px; }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+</style>
+
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="bean" class="bean"><ellipse rx="13" ry="19"/><path d="M0 -16 C -7 -5, 7 5, 0 16"/></g>
+    <radialGradient id="crema" cx="50%" cy="45%" r="55%">
+      <stop offset="0%" style="stop-color:var(--crema)"/>
+      <stop offset="85%" style="stop-color:var(--bean)"/>
+    </radialGradient>
+  </defs>
+</svg>
+
+<nav class="nav" aria-label="Разделы">
+  <div class="wrap">
+    <a class="logo" href="#top">Зерно</a>
+    <ul>
+      <li><a href="#menu">Меню</a></li>
+      <li><a href="#path">Обжарка</a></li>
+      <li><a href="#beans">Зерно с собой</a></li>
+      <li><a href="#book">Бронь</a></li>
+      <li><a href="#visit">Контакты</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="top">
+  <div class="wrap">
+    <header class="hero">
+      <div>
+        <span class="eyebrow">Кофейня и обжарочная · с 8:00</span>
+        <h1>Зерно</h1>
+        <p class="lead">Обжариваем сами, каждый четверг. Эспрессо на смеси Бразилии и Эфиопии, фильтр на моносортах, свежая выпечка к открытию. Можно взять с собой, можно сесть у окна.</p>
+        <div class="btns">
+          <a class="btn primary" href="#menu">Смотреть меню</a>
+          <a class="btn" href="#book">Забронировать столик</a>
+        </div>
+      </div>
+      <figure class="hero-photo">
+        <img src="img/coffee-hero.jpg" alt="Капучино с рисунком, молотый кофе и зёрна в холдерах кофемашины">
+        <span class="badge">Обжарка<br>в четверг</span>
+      </figure>
+    </header>
+
+    <div class="facts">
+      <div><b>6</b><span>сортов зерна в работе</span></div>
+      <div><b>7 дней</b><span>от обжарки до чашки, не больше</span></div>
+      <div><b>32</b><span>места в зале и на веранде</span></div>
+      <div><b>9 бар</b><span>давление на нашей кофемашине</span></div>
+    </div>
+
+    <div class="gallery">
+      <figure><img src="img/coffee-interior.jpg" alt="Гости за столиками в светлом зале кофейни" loading="lazy"><figcaption>Зал на 32 места и веранда</figcaption></figure>
+      <figure><img src="img/coffee-barista.jpg" alt="Бариста рисует на пенке латте" loading="lazy"><figcaption>Рисунок на каждой чашке</figcaption></figure>
+      <figure><img src="img/coffee-espresso.jpg" alt="Эспрессо льётся из холдера в белую чашку" loading="lazy"><figcaption>Эспрессо за 28 секунд</figcaption></figure>
+    </div>
+  </div>
+
+  <section id="menu">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Меню</span>
+        <h2>Что налить</h2>
+        <p>Объём указан для стакана с собой. В зале подаём в фарфоре, порции те же.</p>
+      </div>
+      <div class="menu">
+        <div class="tabs" role="tablist" aria-label="Разделы меню">
+          <button class="tab" role="tab" id="t-coffee" aria-controls="p-coffee" aria-selected="true">Кофе</button>
+          <button class="tab" role="tab" id="t-filter" aria-controls="p-filter" aria-selected="false">Фильтр</button>
+          <button class="tab" role="tab" id="t-other" aria-controls="p-other" aria-selected="false">Не кофе</button>
+          <button class="tab" role="tab" id="t-food" aria-controls="p-food" aria-selected="false">Еда</button>
+        </div>
+
+        <div class="panel" role="tabpanel" id="p-coffee" aria-labelledby="t-coffee">
+          <div class="item"><div class="row"><span class="name">Эспрессо</span><span class="vol">30 мл</span><span class="dots"></span></div><span class="price">150 ₽</span><span class="desc">18 г кофе, 28 секунд. Шоколад и орех.</span></div>
+          <div class="item"><div class="row"><span class="name">Американо</span><span class="vol">250 мл</span><span class="dots"></span></div><span class="price">190 ₽</span></div>
+          <div class="item"><div class="row"><span class="name">Капучино</span><span class="vol">300 мл</span><span class="dots"></span></div><span class="price">250 ₽</span><span class="desc">Плотная пенка, рисунок на каждой чашке.</span></div>
+          <div class="item"><div class="row"><span class="name">Флэт уайт</span><span class="vol">200 мл</span><span class="dots"></span></div><span class="price">260 ₽</span><span class="desc">Двойной эспрессо и тонкий слой молока. Крепче капучино.</span></div>
+          <div class="item"><div class="row"><span class="name">Латте</span><span class="vol">350 мл</span><span class="dots"></span></div><span class="price">270 ₽</span></div>
+          <div class="item"><div class="row"><span class="name">Раф ванильный</span><span class="vol">300 мл</span><span class="dots"></span></div><span class="price">290 ₽</span><span class="desc">Сливки, ванильный сахар, эспрессо. Взбиваем вместе.</span></div>
+        </div>
+
+        <div class="panel" role="tabpanel" id="p-filter" aria-labelledby="t-filter" hidden>
+          <div class="item"><div class="row"><span class="name">Эфиопия, Иргачефф</span><span class="vol">воронка V60</span><span class="dots"></span></div><span class="price">270 ₽</span><span class="desc">Бергамот, жасмин, лимонная кислинка.</span></div>
+          <div class="item"><div class="row"><span class="name">Колумбия, Уила</span><span class="vol">аэропресс</span><span class="dots"></span></div><span class="price">250 ₽</span><span class="desc">Карамель, красное яблоко.</span></div>
+          <div class="item"><div class="row"><span class="name">Кения, Ньери</span><span class="vol">воронка V60</span><span class="dots"></span></div><span class="price">300 ₽</span><span class="desc">Чёрная смородина, томат, яркая кислотность.</span></div>
+          <div class="item"><div class="row"><span class="name">Колд брю</span><span class="vol">300 мл</span><span class="dots"></span></div><span class="price">240 ₽</span><span class="desc">Настаиваем 16 часов в холодной воде.</span></div>
+        </div>
+
+        <div class="panel" role="tabpanel" id="p-other" aria-labelledby="t-other" hidden>
+          <div class="item"><div class="row"><span class="name">Какао на молоке</span><span class="vol">300 мл</span><span class="dots"></span></div><span class="price">230 ₽</span></div>
+          <div class="item"><div class="row"><span class="name">Матча латте</span><span class="vol">300 мл</span><span class="dots"></span></div><span class="price">290 ₽</span></div>
+          <div class="item"><div class="row"><span class="name">Чай облепиховый</span><span class="vol">500 мл</span><span class="dots"></span></div><span class="price">260 ₽</span><span class="desc">Облепиха, апельсин, мёд.</span></div>
+          <div class="item"><div class="row"><span class="name">Лимонад тархун</span><span class="vol">400 мл</span><span class="dots"></span></div><span class="price">220 ₽</span></div>
+        </div>
+
+        <div class="panel" role="tabpanel" id="p-food" aria-labelledby="t-food" hidden>
+          <div class="item"><div class="row"><span class="name">Круассан сливочный</span><span class="dots"></span></div><span class="price">160 ₽</span></div>
+          <div class="item"><div class="row"><span class="name">Круассан с ветчиной и сыром</span><span class="dots"></span></div><span class="price">260 ₽</span></div>
+          <div class="item"><div class="row"><span class="name">Сырники со сметаной</span><span class="dots"></span></div><span class="price">280 ₽</span><span class="desc">Три штуки, подаём до 14:00.</span></div>
+          <div class="item"><div class="row"><span class="name">Чизкейк Сан-Себастьян</span><span class="dots"></span></div><span class="price">270 ₽</span></div>
+          <div class="item"><div class="row"><span class="name">Синнабон с корицей</span><span class="dots"></span></div><span class="price">210 ₽</span></div>
+        </div>
+
+        <p class="note">Растительное молоко (овсяное, миндальное, кокосовое) +40 ₽. Сироп +30 ₽. Дополнительный шот эспрессо +60 ₽.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="offer">
+        <svg viewBox="0 0 120 120" aria-hidden="true">
+          <circle class="o-fill" cx="60" cy="60" r="52"/>
+          <circle class="o-cr" cx="60" cy="60" r="40"/>
+          <path class="o-fill" d="M60 86 C 36 70, 36 46, 50 46 C 56 46, 59 50, 60 55 C 61 50, 64 46, 70 46 C 84 46, 84 70, 60 86 Z"/>
+        </svg>
+        <div style="display:grid;gap:10px">
+          <span class="eyebrow" style="color:var(--foam)">Утро будней</span>
+          <h2>Капучино и круассан за 350 ₽</h2>
+          <p>С 8:00 до 11:00, с понедельника по пятницу. Каждая десятая чашка по карте гостя бесплатно.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="path">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Обжарка</span>
+        <h2>Путь зерна до чашки</h2>
+        <p>Вся обжарка в зале, за стеклом. В четверг с 10 до 12 можно прийти и посмотреть.</p>
+      </div>
+      <img class="wide-photo" src="img/coffee-roast.jpg" alt="Обжарщик перемешивает свежеобжаренные зёрна совком" loading="lazy">
+      <div class="steps">
+        <div class="step">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><path class="ico-line" d="M12 50 L12 24 L32 12 L52 24 L52 50 Z"/><path class="ico-line" d="M24 50 V34 H40 V50"/></svg>
+          <span class="n">ШАГ 1</span><h3>Зелёное зерно</h3>
+          <p>Покупаем у импортёров партиями по 60 кг. Каждую партию сначала пробуем на капинге.</p>
+        </div>
+        <div class="step">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><circle class="ico-line" cx="32" cy="34" r="18"/><path class="ico-line" d="M32 22 V34 L40 40"/><path class="ico-line" d="M26 8 H38"/></svg>
+          <span class="n">ШАГ 2</span><h3>Обжарка 11 минут</h3>
+          <p>Ростер на 5 кг. Зерно доходит до 205–215 °C, светлее для фильтра, темнее для эспрессо.</p>
+        </div>
+        <div class="step">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><rect class="ico-line" x="18" y="12" width="28" height="40" rx="4"/><path class="ico-line" d="M18 24 H46"/><circle class="ico-fill" cx="32" cy="38" r="5"/></svg>
+          <span class="n">ШАГ 3</span><h3>Отдых 3–5 дней</h3>
+          <p>Зерно отдаёт углекислый газ через клапан в пакете. Свежеобжаренный кофе сразу варить нельзя.</p>
+        </div>
+        <div class="step">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><path class="ico-line" d="M14 26 H44 V40 A12 12 0 0 1 32 52 H26 A12 12 0 0 1 14 40 Z"/><path class="ico-line" d="M44 30 H50 A6 6 0 0 1 50 42 H44"/><path class="ico-line" d="M24 18 C 22 14, 26 12, 24 8 M34 18 C 32 14, 36 12, 34 8"/></svg>
+          <span class="n">ШАГ 4</span><h3>В чашку</h3>
+          <p>Мелем прямо перед приготовлением. Каждое утро бариста настраивает помол, пока вкус не совпадёт.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="beans">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Зерно с собой</span>
+        <h2>Для дома и офиса</h2>
+        <p>Пачки по 250 г. Смелем под вашу турку, гейзер или кофемашину, если скажете.</p>
+      </div>
+      <img class="wide-photo" src="img/coffee-beans.jpg" alt="Кофейные зёрна и молотый кофе на деревянной доске" loading="lazy">
+      <div class="packs">
+        <div class="pack">
+          <svg viewBox="0 0 72 90" aria-hidden="true"><path class="bag" d="M8 14 L64 14 L60 86 L12 86 Z"/><rect class="label" x="18" y="36" width="36" height="28" rx="3"/><line class="tag-line" x1="24" y1="46" x2="48" y2="46"/><line class="tag-line" x1="24" y1="54" x2="40" y2="54"/></svg>
+          <h3>Смесь «Утро»</h3>
+          <p class="notes">Бразилия и Эфиопия. Молочный шоколад, фундук. Для капучино и турки.</p>
+          <div class="roast">Обжарка <i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+          <span class="p">690 ₽</span>
+        </div>
+        <div class="pack">
+          <svg viewBox="0 0 72 90" aria-hidden="true"><path class="bag" d="M8 14 L64 14 L60 86 L12 86 Z"/><rect class="label" x="18" y="36" width="36" height="28" rx="3"/><line class="tag-line" x1="24" y1="46" x2="48" y2="46"/><line class="tag-line" x1="24" y1="54" x2="40" y2="54"/></svg>
+          <h3>Эфиопия Иргачефф</h3>
+          <p class="notes">Мытая обработка. Бергамот, жасмин, чай с лимоном. Для воронки.</p>
+          <div class="roast">Обжарка <i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
+          <span class="p">890 ₽</span>
+        </div>
+        <div class="pack">
+          <svg viewBox="0 0 72 90" aria-hidden="true"><path class="bag" d="M8 14 L64 14 L60 86 L12 86 Z"/><rect class="label" x="18" y="36" width="36" height="28" rx="3"/><line class="tag-line" x1="24" y1="46" x2="48" y2="46"/><line class="tag-line" x1="24" y1="54" x2="40" y2="54"/></svg>
+          <h3>Колумбия Уила</h3>
+          <p class="notes">Карамель, красное яблоко, мягкая кислотность. Для аэропресса и гейзера.</p>
+          <div class="roast">Обжарка <i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
+          <span class="p">790 ₽</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Отзывы</span>
+        <h2>Что говорят гости</h2>
+        <p>Образец блока. На настоящем сайте здесь будут отзывы с Яндекс Карт или 2ГИС.</p>
+      </div>
+      <div class="reviews">
+        <div class="review"><p>Здесь будет отзыв гостя про любимый напиток.</p><span>Имя гостя · источник отзыва</span></div>
+        <div class="review"><p>Здесь будет отзыв про атмосферу и обслуживание.</p><span>Имя гостя · источник отзыва</span></div>
+        <div class="review"><p>Здесь будет отзыв про выпечку или зерно с собой.</p><span>Имя гостя · источник отзыва</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="book">
+    <div class="wrap book">
+      <div class="sec-head" style="margin:0">
+        <span class="eyebrow">Бронь</span>
+        <h2>Займём столик к вашему приходу</h2>
+        <p>Бронь держим 15 минут. Компанию больше 8 человек лучше обсудить по телефону.</p>
+      </div>
+      <form id="bookform">
+        <label>Имя<input id="b-name" required autocomplete="name" placeholder="Анна"></label>
+        <label>Телефон<input id="b-phone" required type="tel" autocomplete="tel" placeholder="+7 900 000-00-00"></label>
+        <label>Дата<input id="b-date" required type="date"></label>
+        <label>Время
+          <select id="b-time">
+            <option>09:00</option><option>10:00</option><option>11:00</option><option>12:00</option><option>13:00</option><option>14:00</option><option>15:00</option><option>16:00</option><option>17:00</option><option selected>18:00</option><option>19:00</option><option>20:00</option>
+          </select>
+        </label>
+        <label class="full">Гостей
+          <select id="b-guests"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5–8</option></select>
+        </label>
+        <button class="btn primary full" type="submit">Забронировать</button>
+        <div class="done" id="b-done" hidden></div>
+      </form>
+    </div>
+  </section>
+
+  <section id="visit">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Контакты</span>
+        <h2>Как нас найти</h2>
+      </div>
+      <div class="visit">
+        <div>
+          <svg class="map" viewBox="0 0 320 220" role="img" aria-label="Схема: кофейня на углу Садовой и Парковой, напротив сквера">
+            <rect class="park" x="190" y="20" width="110" height="80" rx="10"/>
+            <path class="street" d="M0 130 H320"/>
+            <path class="street" d="M150 0 V220"/>
+            <circle class="pin" cx="170" cy="150" r="12"/>
+            <text x="190" y="155">Зерно</text>
+            <text x="12" y="120">ул. Садовая</text>
+            <text x="200" y="64">Сквер</text>
+          </svg>
+          <p class="note">Вход с угла, рядом с остановкой «Садовая». Парковка во дворе.</p>
+        </div>
+        <div>
+          <table class="hours">
+            <tr><td>Понедельник – пятница</td><td>8:00–21:00</td></tr>
+            <tr><td>Суббота</td><td>9:00–22:00</td></tr>
+            <tr><td>Воскресенье</td><td>9:00–22:00</td></tr>
+          </table>
+          <div class="contact"><b>Адрес</b><span>ул. Садовая, 12</span></div>
+          <div class="contact"><b>Телефон</b><span>+7 900 000-00-00</span></div>
+        </div>
+        <div>
+          <details><summary>Можно ли с ноутбуком?</summary><p>Да. У окна есть розетки, Wi-Fi бесплатный, пароль на чеке.</p></details>
+          <details><summary>Есть ли без лактозы?</summary><p>Любой напиток делаем на овсяном, миндальном или кокосовом молоке.</p></details>
+          <details><summary>Можно с собакой?</summary><p>Да, на веранде и в зале. Миска с водой стоит у входа.</p></details>
+          <details><summary>Делаете кофе на мероприятия?</summary><p>Привозим бариста и кофемашину. Минимум 50 чашек, позвоните заранее.</p></details>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© Кофейня «Зерно»</span>
+    <span>Демо-сайт для портфолио. Кофейня вымышленная. Фото: Unsplash.</span>
+  </div>
+</footer>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  tabs.forEach(t => t.addEventListener('click', () => {
+    tabs.forEach(o => {
+      const on = o === t;
+      o.setAttribute('aria-selected', on);
+      document.getElementById(o.getAttribute('aria-controls')).hidden = !on;
+    });
+  }));
+
+  const date = document.getElementById('b-date');
+  const localDay = d => new Date(d - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  const today = localDay(new Date());
+  date.min = today;
+  date.value = today;
+
+  document.getElementById('bookform').addEventListener('submit', e => {
+    e.preventDefault();
+    const done = document.getElementById('b-done');
+    const name = document.getElementById('b-name').value.trim();
+    const d = new Date(date.value).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+    done.textContent = `${name}, столик на ${document.getElementById('b-guests').value} ждёт вас ${d} в ${document.getElementById('b-time').value}. Это демо: заявка никуда не отправилась.`;
+    done.hidden = false;
+  });
+</script>
+
+<a class="pf-back" href="../index.html">&larr; Портфолио</a>
+<script>
+  // Кнопки-ссылки на разделы плавно прокручивают страницу, а не перескакивают
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const target = document.getElementById(a.getAttribute('href').slice(1));
+    if (!target) return;
+    e.preventDefault();
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  });
+</script></body>
+</html>
